@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:MarketServiceApp/pages/editarPerfil_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -163,9 +164,19 @@ class _ProfilePageState extends State<ProfilePage> {
 
             const SizedBox(height: 8),
 
-            _MenuItem(icon: Icons.person, text: "Editar Perfil"),
-            _MenuItem(icon: Icons.map, text: "Dirección"),
-            _MenuItem(icon: Icons.security, text: "Seguridad"),
+            _MenuItem(
+              icon: Icons.person,
+              text: "Editar Perfil",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const EditProfilePage()),
+                );
+              },
+            ),
+
+            _MenuItem(icon: Icons.map, text: "Dirección", onTap: () {}),
+            _MenuItem(icon: Icons.security, text: "Seguridad", onTap: () {}),
 
             const SizedBox(height: 24),
 
@@ -234,8 +245,13 @@ class _StatCard extends StatelessWidget {
 class _MenuItem extends StatelessWidget {
   final IconData icon;
   final String text;
+  final VoidCallback onTap;
 
-  const _MenuItem({required this.icon, required this.text});
+  const _MenuItem({
+    required this.icon,
+    required this.text,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +262,7 @@ class _MenuItem extends StatelessWidget {
       ),
       title: Text(text),
       trailing: const Icon(Icons.chevron_right),
-      onTap: () {},
+      onTap: onTap,
     );
   }
 }

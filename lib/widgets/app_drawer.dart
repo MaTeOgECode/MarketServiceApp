@@ -48,10 +48,8 @@ class AppDrawer extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: primaryColor, width: 2),
-                        image: const DecorationImage(
-                          image: NetworkImage(
-                            'https://via.placeholder.com/150',
-                          ),
+                        image: DecorationImage(
+                          image: NetworkImage(snapshot.data?.fotoUrl ?? ''),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -77,15 +75,6 @@ class AppDrawer extends StatelessWidget {
                               color: isDark ? Colors.white70 : Colors.black54,
                             ),
                             overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            'Ver perfil >',
-                            style: TextStyle(
-                              color: primaryColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
                           ),
                         ],
                       ),
