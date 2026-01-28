@@ -1,9 +1,12 @@
+import 'package:MarketServiceApp/pages/historial_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:miproyecto/pages/login_page.dart';
-import 'package:miproyecto/environments/dev.dart';
-import 'package:miproyecto/pages/home_page.dart';
-import 'package:miproyecto/pages/register_page.dart';
+import 'package:MarketServiceApp/pages/login_page.dart';
+import 'package:MarketServiceApp/environments/dev.dart';
+import 'package:MarketServiceApp/pages/home_page.dart';
+import 'package:MarketServiceApp/pages/register_page.dart';
+import 'package:MarketServiceApp/pages/info_page.dart';
+import 'package:MarketServiceApp/pages/perfil_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,8 +41,11 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/home': (context) => const HomePage(),
         '/register': (context) => const RegisterPage(),
+        '/info': (context) => const AboutCreatorsPage(),
+        '/profile': (context) => const ProfilePage(),
+        '/historial': (context) => const ServiceHistoryPage(),
       },
-      
+
       // CONFIGURACIÓN DE TEMA CLARO
       theme: ThemeData(
         useMaterial3: true,
@@ -89,9 +95,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      
+
       // Permite que el sistema elija según la configuración del usuario
-      themeMode: ThemeMode.system, 
+      themeMode: ThemeMode.system,
     );
   }
 }

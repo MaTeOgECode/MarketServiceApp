@@ -4,6 +4,7 @@ class UserModel {
   final String direccion;
   final String email;
   final String rol;
+  final String? fotoUrl;
 
   UserModel({
     required this.nombre,
@@ -11,9 +12,9 @@ class UserModel {
     required this.direccion,
     required this.email,
     required this.rol,
+    this.fotoUrl,
   });
 
-  // Para enviar datos a Firebase
   Map<String, dynamic> toMap() {
     return {
       'nombre': nombre,
@@ -21,11 +22,11 @@ class UserModel {
       'direccion': direccion,
       'email': email,
       'rol': rol,
-      'createdAt': DateTime.now(), // Corregido: 'createdAt'
+      'fotoUrl': fotoUrl,
+      'createdAt': DateTime.now(),
     };
   }
 
-  // NUEVO: Para recibir datos de Firebase (Indispensable para el error fromMap)
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       nombre: map['nombre'] ?? '',
@@ -33,6 +34,7 @@ class UserModel {
       direccion: map['direccion'] ?? '',
       email: map['email'] ?? '',
       rol: map['rol'] ?? 'Cliente',
+      fotoUrl: map['fotoUrl'],
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class CategoriasModel {
   final String id;
   final String nombre;

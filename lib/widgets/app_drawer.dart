@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:miproyecto/services/auth_service.dart';
-import 'package:miproyecto/models/user_model.dart';
+import 'package:MarketServiceApp/services/auth_service.dart';
+import 'package:MarketServiceApp/models/user_model.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -31,8 +31,15 @@ class AppDrawer extends StatelessWidget {
               String email = firebaseUser?.email ?? "";
 
               return Container(
-                padding: const EdgeInsets.only(top: 60, bottom: 24, left: 24, right: 24),
-                color: isDark ? Colors.white.withOpacity(0.05) : const Color(0xFFF8F9FA),
+                padding: const EdgeInsets.only(
+                  top: 60,
+                  bottom: 24,
+                  left: 24,
+                  right: 24,
+                ),
+                color: isDark
+                    ? Colors.white.withOpacity(0.05)
+                    : const Color(0xFFF8F9FA),
                 child: Row(
                   children: [
                     Container(
@@ -42,7 +49,9 @@ class AppDrawer extends StatelessWidget {
                         shape: BoxShape.circle,
                         border: Border.all(color: primaryColor, width: 2),
                         image: const DecorationImage(
-                          image: NetworkImage('https://via.placeholder.com/150'),
+                          image: NetworkImage(
+                            'https://via.placeholder.com/150',
+                          ),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -72,7 +81,11 @@ class AppDrawer extends StatelessWidget {
                           const SizedBox(height: 4),
                           const Text(
                             'Ver perfil >',
-                            style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 12),
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
@@ -88,13 +101,31 @@ class AppDrawer extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
               children: [
-                _item(Icons.sell_outlined, 'Promociones', isDark, () {}),
-                _item(Icons.credit_card_outlined, 'Métodos de Pago', isDark, () {}),
-                const SizedBox(height: 8),
-                _providerButton(primaryColor),
+                _item(Icons.monetization_on, 'Contratos', isDark, () {}),
+                ListTile(
+                  leading: const Icon(Icons.history, color: Color(0xFF136DEC)),
+                  title: const Text("Historial"),
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/historial');
+                  },
+                ),
                 const Divider(height: 32),
                 _item(Icons.help_outline, 'Ayuda y Soporte', isDark, () {}),
-                _item(Icons.info_outline, 'Sobre Nosotros', isDark, () {}),
+                ListTile(
+                  leading: const Icon(
+                    Icons.people_outline,
+                    color: Color(0xFF136DEC),
+                  ),
+                  title: const Text("Sobre nosotros"),
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                  onTap: () {
+                    Navigator.pop(context);
+
+                    Navigator.pushNamed(context, '/info');
+                  },
+                ),
               ],
             ),
           ),
@@ -110,22 +141,11 @@ class AppDrawer extends StatelessWidget {
   Widget _item(IconData icon, String label, bool isDark, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon, color: isDark ? Colors.white60 : Colors.black54),
-      title: Text(label, style: TextStyle(color: isDark ? Colors.white70 : Colors.black87)),
+      title: Text(
+        label,
+        style: TextStyle(color: isDark ? Colors.white70 : Colors.black87),
+      ),
       onTap: onTap,
-    );
-  }
-
-  Widget _providerButton(Color color) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
-      ),
-      child: ListTile(
-        leading: Icon(Icons.work_outline, color: color),
-        title: Text('Ser un Proveedor', style: TextStyle(color: color, fontWeight: FontWeight.bold)),
-      ),
     );
   }
 
@@ -141,7 +161,13 @@ class AppDrawer extends StatelessWidget {
           children: [
             Icon(Icons.logout, color: Colors.redAccent),
             SizedBox(width: 16),
-            Text('Cerrar Sesión', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+            Text(
+              'Cerrar Sesión',
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
       ),

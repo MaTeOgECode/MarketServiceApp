@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final CategoriasService _categoriasService = CategoriasService();
   final ServiciosService _serviciosService = ServiciosService();
-  
+
   String? _selectedCategoryId;
   int _selectedIndex = 0; // Para manejar la navegación inferior
 
@@ -22,21 +22,34 @@ class _HomePageState extends State<HomePage> {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF101922) : const Color(0xFFF6F7F8),
+      backgroundColor: isDark
+          ? const Color(0xFF101922)
+          : const Color(0xFFF6F7F8),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: Builder(builder: (context) => IconButton(
-          icon: Icon(Icons.menu, color: isDark ? Colors.white : Colors.black),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        )),
-        title: Text('Inicio', style: TextStyle(color: isDark ? Colors.white : Colors.black, fontWeight: FontWeight.bold)),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.menu, color: isDark ? Colors.white : Colors.black),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+        title: Text(
+          'Inicio',
+          style: TextStyle(
+            color: isDark ? Colors.white : Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications_none, color: isDark ? Colors.white : Colors.black),
+            icon: Icon(
+              Icons.notifications_none,
+              color: isDark ? Colors.white : Colors.black,
+            ),
             onPressed: () {},
-          )
+          ),
         ],
       ),
       drawer: const AppDrawer(),
@@ -52,14 +65,26 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF1E293B) : Colors.white,
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: const Offset(0, 2))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: "Buscar servicios...",
                     hintStyle: const TextStyle(color: Color(0xFF4C739A)),
-                    prefixIcon: const Icon(Icons.search, color: Color(0xFF4C739A)),
-                    suffixIcon: const Icon(Icons.tune, color: Color(0xFF4C739A)),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: Color(0xFF4C739A),
+                    ),
+                    suffixIcon: const Icon(
+                      Icons.tune,
+                      color: Color(0xFF4C739A),
+                    ),
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(vertical: 12),
                   ),
@@ -71,12 +96,19 @@ class _HomePageState extends State<HomePage> {
             AppWidgetHome.buildCategoriesList(
               service: _categoriasService,
               selectedId: _selectedCategoryId,
-              onCategorySelected: (nombre) => setState(() => _selectedCategoryId = (_selectedCategoryId == nombre) ? null : nombre),
+              onCategorySelected: (nombre) => setState(
+                () => _selectedCategoryId = (_selectedCategoryId == nombre)
+                    ? null
+                    : nombre,
+              ),
             ),
 
             const Padding(
               padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-              child: Text("Recomendado para ti", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              child: Text(
+                "Recomendado para ti",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
 
             AppWidgetHome.buildServicesList(
@@ -84,30 +116,45 @@ class _HomePageState extends State<HomePage> {
               filterId: _selectedCategoryId,
               isDark: isDark,
             ),
-            
+
             const SizedBox(height: 100),
           ],
         ),
       ),
-      
+
       // BARRA DE NAVEGACIÓN INFERIOR (BottomNavigationBar)
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
+          if (index == 3) {
+            Navigator.pushNamed(context, '/profile');
+          } else {
+            setState(() {
+              _selectedIndex = index;
+            });
+          }
         },
         type: BottomNavigationBarType.fixed,
-        backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+        backgroundColor: isDark
+            ? const Color.fromARGB(255, 195, 207, 224)
+            : Colors.white,
         selectedItemColor: const Color(0xFF137FEC),
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Reservas'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: 'Mensajes'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Perfil'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Reservas',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_outline),
+            label: 'Mensajes',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: 'Perfil',
+          ),
         ],
       ),
     );

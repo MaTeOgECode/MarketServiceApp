@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:miproyecto/models/user_model.dart';
+import 'package:MarketServiceApp/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
@@ -10,11 +10,14 @@ class AuthService {
   User? get currentUser => _auth.currentUser;
 
   // INICIO DE SESIÓN
-  Future<User?> signInWithEmailAndPassword(String email, String password) async {
+  Future<User?> signInWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email, 
-        password: password
+        email: email,
+        password: password,
       );
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
@@ -38,11 +41,9 @@ class AuthService {
   }) async {
     try {
       // 1. Crear el usuario en Firebase Auth
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email, 
-        password: password,
-      );
-      
+      UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
+
       User? user = userCredential.user;
 
       if (user != null) {
@@ -58,7 +59,7 @@ class AuthService {
         // 3. Guardar en la colección 'usuarios' de Firestore usando el UID de Auth
         await _db.collection('usuarios').doc(user.uid).set(userModel.toMap());
       }
-      
+
       return user;
     } catch (e) {
       print("Error en el registro: $e");
