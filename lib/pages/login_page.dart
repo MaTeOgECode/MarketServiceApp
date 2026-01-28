@@ -16,12 +16,14 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
   String _errorMessage = '';
 
-  // Definición de colores según el HTML
+  // PALETA DE COLORES REFINADA
   final Color primaryColor = const Color(0xFF137FEC);
   final Color lightBg = const Color(0xFFF6F7F8);
   final Color darkBg = const Color(0xFF101922);
   final Color inputBorder = const Color(0xFFCFDBE7);
-  final Color textGray = const Color.fromARGB(255, 13, 13, 14);
+  
+  // Color gris neutro para textos secundarios (legible en ambos modos)
+  final Color textGray = const Color(0xFF94A3B8); 
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             const SizedBox(height: 32),
 
-            // Branding/Logo Placeholder (Icono de Herramienta)
+            // Logo Placeholder
             Container(
               width: 64,
               height: 64,
@@ -75,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
 
             const SizedBox(height: 24),
 
-            // HeadlineText
+            // Headline
             Text(
               'Bienvenido',
               style: TextStyle(
@@ -87,11 +89,14 @@ class _LoginPageState extends State<LoginPage> {
 
             const SizedBox(height: 8),
 
-            // BodyText
+            // Subtítulo corregido para visibilidad
             Text(
               'Inicia sesión para reservar tu próximo servicio',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: textGray),
+              style: TextStyle(
+                fontSize: 16, 
+                color: isDark ? Colors.white70 : const Color(0xFF4B5563)
+              ),
             ),
 
             const SizedBox(height: 32),
@@ -102,7 +107,6 @@ class _LoginPageState extends State<LoginPage> {
               controller: _emailController,
               hint: 'Ingresa tu correo',
               isDark: isDark,
-              icon: null,
             ),
 
             const SizedBox(height: 16),
@@ -147,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-            // Botón de Login
+            // Botón de Ingresar
             SizedBox(
               width: double.infinity,
               height: 56,
@@ -176,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.symmetric(vertical: 32),
               child: Row(
                 children: [
-                  Expanded(child: Divider(color: inputBorder)),
+                  Expanded(child: Divider(color: isDark ? Colors.white12 : inputBorder)),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
@@ -184,12 +188,12 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: textGray, fontSize: 14),
                     ),
                   ),
-                  Expanded(child: Divider(color: inputBorder)),
+                  Expanded(child: Divider(color: isDark ? Colors.white12 : inputBorder)),
                 ],
               ),
             ),
 
-            // Social Logins
+            // Social Logins Dinámicos
             Row(
               children: [
                 Expanded(
@@ -197,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                     'Google',
                     Icons.g_mobiledata,
                     isDark,
-                    Colors.white,
+                    isDark ? const Color(0xFF1E293B) : Colors.white,
                     isDark ? Colors.white : Colors.black,
                   ),
                 ),
@@ -207,8 +211,8 @@ class _LoginPageState extends State<LoginPage> {
                     'Apple',
                     Icons.apple,
                     isDark,
-                    Colors.black,
-                    Colors.white,
+                    isDark ? Colors.white : Colors.black,
+                    isDark ? Colors.black : Colors.white,
                   ),
                 ),
               ],
@@ -219,7 +223,10 @@ class _LoginPageState extends State<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('¿No tienes cuenta?', style: TextStyle(color: textGray)),
+                Text(
+                  '¿No tienes cuenta?', 
+                  style: TextStyle(color: isDark ? Colors.white70 : const Color(0xFF4B5563))
+                ),
                 TextButton(
                   onPressed: () => Navigator.pushNamed(context, '/register'),
                   child: Text(
@@ -239,7 +246,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Helper para etiquetas de campos
   Widget _buildLabel(String text, bool isDark) {
     return Align(
       alignment: Alignment.centerLeft,
@@ -256,7 +262,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Helper para los inputs estilizados
   Widget _buildTextField({
     required TextEditingController controller,
     required String hint,
@@ -268,7 +273,7 @@ class _LoginPageState extends State<LoginPage> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: isDark ? Colors.transparent : inputBorder),
+        border: Border.all(color: isDark ? Colors.white10 : inputBorder),
       ),
       child: TextField(
         controller: controller,
@@ -276,7 +281,7 @@ class _LoginPageState extends State<LoginPage> {
         style: TextStyle(color: isDark ? Colors.white : Colors.black),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(color: textGray),
+          hintStyle: TextStyle(color: isDark ? Colors.white38 : textGray),
           contentPadding: const EdgeInsets.all(16),
           border: InputBorder.none,
           suffixIcon: icon,
@@ -285,7 +290,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Helper para botones sociales
   Widget _socialButton(
     String label,
     IconData icon,
@@ -293,28 +297,30 @@ class _LoginPageState extends State<LoginPage> {
     Color bgColor,
     Color textColor,
   ) {
-    return Container(
-      height: 56,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: inputBorder),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: textColor, size: 28),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
-          ),
-        ],
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        height: 56,
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: isDark ? Colors.transparent : inputBorder),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: textColor, size: 28),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  // Lógica de autenticación
   Future<void> _handleLogin() async {
     final user = await _authService.signInWithEmailAndPassword(
       _emailController.text,

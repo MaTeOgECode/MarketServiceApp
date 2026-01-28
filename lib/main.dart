@@ -25,7 +25,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // Colores extraídos de tu código HTML
   static const Color primaryBlue = Color(0xFF137FEC);
   static const Color lightBackground = Color(0xFFF6F7F8);
   static const Color darkBackground = Color(0xFF101922);
@@ -45,20 +44,18 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => const ProfilePage(),
         '/historial': (context) => const ServiceHistoryPage(),
       },
-
-      // CONFIGURACIÓN DE TEMA CLARO
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
         primaryColor: primaryBlue,
         scaffoldBackgroundColor: lightBackground,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: primaryBlue,
-          brightness: Brightness.light,
+        colorScheme: const ColorScheme.light(
           primary: primaryBlue,
+          onPrimary: Colors.white,
           surface: Colors.white,
+          onSurface: Color(0xFF0D141B),
         ),
-        fontFamily: 'Inter', // Asegúrate de tener esta fuente en pubspec.yaml
+        fontFamily: 'Inter',
         appBarTheme: const AppBarTheme(
           backgroundColor: lightBackground,
           elevation: 0,
@@ -70,33 +67,19 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-
-      // CONFIGURACIÓN DE TEMA OSCURO
       darkTheme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
         primaryColor: primaryBlue,
         scaffoldBackgroundColor: darkBackground,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: primaryBlue,
-          brightness: Brightness.dark,
+        colorScheme: const ColorScheme.dark(
           primary: primaryBlue,
+          onPrimary: Colors.white,
           surface: darkInput,
+          onSurface: Colors.white,
         ),
         fontFamily: 'Inter',
-        appBarTheme: const AppBarTheme(
-          backgroundColor: darkBackground,
-          elevation: 0,
-          centerTitle: true,
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
       ),
-
-      // Permite que el sistema elija según la configuración del usuario
       themeMode: ThemeMode.system,
     );
   }

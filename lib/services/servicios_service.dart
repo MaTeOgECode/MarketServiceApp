@@ -19,4 +19,28 @@ class ServiciosService {
       }).toList();
     });
   }
+
+  Future<void> calificarServicio(String servicioId, double nuevaPuntuacion) async {
+  DocumentReference servicioRef = _db.collection('servicios').doc(servicioId);
+
+  return _db.runTransaction((transaction) async {
+    DocumentSnapshot snapshot = await transaction.get(servicioRef);
+
+    if (!snapshot.exists) return;
+
+    // Obtenemos valores actuales de tu DB
+    double promedioActual = (snapshot['promedioEstrellas'] ?? 0.0).toDouble();
+    int votosTotales = snapshot['totalVotos'] ?? 0;
+
+    // Cálculo matemático del nuevo promedio
+    int nuevoTotalVotos = votosTotales + 1;
+    double nuevoPromedio = ((promedioActual * votosTotales) + nuevaPuntuacion) / nuevoTotalVotos;
+
+    // Actualizamos el documento del servicio
+    transaction.update(servicioRef, {
+      'promedioEstrellas': nuevoPromedio,
+      'totalVotos': nuevoTotalVotos,
+    });
+  });
+}
 }
