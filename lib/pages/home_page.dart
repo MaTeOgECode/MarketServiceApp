@@ -4,6 +4,7 @@ import '../widgets/app_home.dart';
 import '../services/categorias_services.dart';
 import '../services/servicios_service.dart';
 import '../pages/reservas_page.dart'; 
+import '../pages/perfil_page.dart'; // Asegúrate de que esta ruta sea correcta
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,7 +20,7 @@ class _HomePageState extends State<HomePage> {
     const _MainHomeContent(),
     const MyBookingsPage(), 
     const Center(child: Text("Mensajes")),
-    const Center(child: Text("Perfil")),
+    const ProfilePage(), // Ahora carga la página real, no un texto
   ];
 
   @override
@@ -35,10 +36,11 @@ class _HomePageState extends State<HomePage> {
         onTap: (index) => setState(() => _selectedIndex = index),
         type: BottomNavigationBarType.fixed,
         backgroundColor: isDark
-            ? const Color.fromARGB(255, 43, 53, 68) // Ajustado para que se vea bien en oscuro
+            ? const Color.fromARGB(255, 43, 53, 68) 
             : Colors.white,
         selectedItemColor: const Color(0xFF137FEC),
         unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Reservas'),
@@ -79,7 +81,6 @@ class _MainHomeContentState extends State<_MainHomeContent> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Aquí puedes re-insertar el buscador si lo tenías
             AppWidgetHome.buildCategoriesList(
               service: _categoriasService,
               selectedId: _selectedCategoryId,

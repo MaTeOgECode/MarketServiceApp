@@ -26,29 +26,37 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> cargarUsuario() async {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-    final doc = await FirebaseFirestore.instance
-        .collection('usuarios')
-        .doc(uid)
-        .get();
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+      
+      final doc = await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user.uid)
+          .get();
 
-    userModel = UserModel.fromMap(doc.data()!);
-    setState(() => loading = false);
+      if (doc.exists && doc.data() != null) {
+        setState(() {
+          userModel = UserModel.fromMap(doc.data()!);
+          loading = false;
+        });
+      }
+    } catch (e) {
+      print("Error cargando perfil: $e");
+      setState(() => loading = false);
+    }
   }
 
   Future<void> seleccionarImagen() async {
     final picked = await picker.pickImage(source: ImageSource.gallery);
-
     if (picked != null) {
-      setState(() {
-        imageFile = File(picked.path);
-      });
-
+      setState(() => imageFile = File(picked.path));
       await subirImagen();
     }
   }
 
   Future<void> subirImagen() async {
+    if (imageFile == null) return;
     final uid = FirebaseAuth.instance.currentUser!.uid;
     final ref = FirebaseStorage.instance.ref('fotosPerfil/$uid.jpg');
 
@@ -58,30 +66,31 @@ class _ProfilePageState extends State<ProfilePage> {
     await FirebaseFirestore.instance.collection('usuarios').doc(uid).update({
       'fotoUrl': url,
     });
-
     await cargarUsuario();
   }
 
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (userModel == null) {
+      return const Center(child: Text("No se pudo cargar la información del usuario"));
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F7F8),
+      backgroundColor: Theme.of(context).brightness == Brightness.dark 
+          ? const Color(0xFF101922) 
+          : const Color(0xFFF6F7F8),
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: const Text("Perfil"),
         centerTitle: true,
+        automaticallyImplyLeading: false, // Quita la flecha de atrás
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            /// HEADER
             Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
@@ -90,86 +99,45 @@ class _ProfilePageState extends State<ProfilePage> {
                     onTap: seleccionarImagen,
                     child: CircleAvatar(
                       radius: 60,
-                      backgroundImage:
-                          userModel!.fotoUrl != null &&
-                              userModel!.fotoUrl!.isNotEmpty
+                      backgroundImage: userModel!.fotoUrl != null && userModel!.fotoUrl!.isNotEmpty
                           ? NetworkImage(userModel!.fotoUrl!)
-                          : const NetworkImage(
-                              "https://via.placeholder.com/150",
-                            ),
+                          : const NetworkImage("https://via.placeholder.com/150"),
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Text(
-                    userModel!.nombre,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text(userModel!.nombre, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(Icons.email, size: 16, color: Colors.blue),
                       const SizedBox(width: 4),
-                      Text(
-                        userModel!.email,
-                        style: const TextStyle(color: Colors.grey),
-                      ),
+                      Text(userModel!.email, style: const TextStyle(color: Colors.grey)),
                     ],
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    "Rol: ${userModel!.rol}",
-                    style: const TextStyle(color: Colors.grey),
-                  ),
+                  Text("Rol: ${userModel!.rol}", style: const TextStyle(color: Colors.grey)),
                 ],
               ),
             ),
 
-            /// STATS
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: const [
-                  Expanded(
-                    child: _StatCard(
-                      value: "0",
-                      label: "Servicios Contratados",
-                    ),
-                  ),
+                  Expanded(child: _StatCard(value: "0", label: "Contrataciones")),
                   SizedBox(width: 12),
-                  Expanded(
-                    child: _StatCard(value: "0", label: "Reseñas Realizadas"),
-                  ),
+                  Expanded(child: _StatCard(value: "0", label: "Reseñas")),
                 ],
               ),
             ),
 
             const SizedBox(height: 24),
-
-            /// ACCOUNT SETTINGS
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Configuración de Cuenta",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
             _MenuItem(icon: Icons.person, text: "Editar Perfil"),
             _MenuItem(icon: Icons.map, text: "Dirección"),
             _MenuItem(icon: Icons.security, text: "Seguridad"),
 
             const SizedBox(height: 24),
-
-            /// LOGOUT
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ElevatedButton.icon(
@@ -177,9 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   backgroundColor: Colors.red[50],
                   foregroundColor: Colors.red,
                   minimumSize: const Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
@@ -189,7 +155,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 label: const Text("Cerrar Sesión"),
               ),
             ),
-
             const SizedBox(height: 30),
           ],
         ),
@@ -198,11 +163,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-/// STAT CARD
 class _StatCard extends StatelessWidget {
   final String value;
   final String label;
-
   const _StatCard({required this.value, required this.label});
 
   @override
@@ -213,16 +176,9 @@ class _StatCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
+            Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF137FEC))),
             const SizedBox(height: 6),
-            Text(label, style: const TextStyle(color: Colors.grey)),
+            Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12), textAlign: TextAlign.center),
           ],
         ),
       ),
@@ -230,11 +186,9 @@ class _StatCard extends StatelessWidget {
   }
 }
 
-/// MENU ITEM
 class _MenuItem extends StatelessWidget {
   final IconData icon;
   final String text;
-
   const _MenuItem({required this.icon, required this.text});
 
   @override
