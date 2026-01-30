@@ -59,16 +59,19 @@ class _ServiceHistoryPageState extends State<ServiceHistoryPage> {
             child: StreamBuilder<List<ServiceRecord>>(
               stream: _getServices(),
               builder: (context, snapshot) {
-                if (snapshot.hasError)
+                if (snapshot.hasError) {
                   return const Center(child: Text("Error al cargar datos"));
-                if (snapshot.connectionState == ConnectionState.waiting)
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
+                }
 
                 final services = snapshot.data!;
-                if (services.isEmpty)
+                if (services.isEmpty) {
                   return const Center(
                     child: Text("No hay historial disponible"),
                   );
+                }
 
                 return ListView.builder(
                   padding: const EdgeInsets.all(16),

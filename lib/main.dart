@@ -1,3 +1,4 @@
+import 'package:MarketServiceApp/pages/chat_page.dart';
 import 'package:MarketServiceApp/pages/historial_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,8 @@ class MyApp extends StatelessWidget {
       title: 'Service Pro',
       debugShowCheckedModeBanner: false,
       initialRoute: '/login',
+
+      // CONFIGURACIÓN DE RUTAS
       routes: {
         '/login': (context) => const LoginPage(),
         '/home': (context) => const HomePage(),
@@ -43,7 +46,9 @@ class MyApp extends StatelessWidget {
         '/info': (context) => const AboutCreatorsPage(),
         '/profile': (context) => const ProfilePage(),
         '/historial': (context) => const ServiceHistoryPage(),
+        '/chat': (context) => const ChatPage(),
       },
+
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
@@ -57,9 +62,10 @@ class MyApp extends StatelessWidget {
         ),
         fontFamily: 'Inter',
         appBarTheme: const AppBarTheme(
-          backgroundColor: lightBackground,
+          backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: true,
+          iconTheme: IconThemeData(color: Color(0xFF0D141B)),
           titleTextStyle: TextStyle(
             color: Color(0xFF0D141B),
             fontSize: 18,

@@ -16,14 +16,12 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
   String _errorMessage = '';
 
-  // PALETA DE COLORES REFINADA
+  // Definición de colores según el HTML
   final Color primaryColor = const Color(0xFF137FEC);
   final Color lightBg = const Color(0xFFF6F7F8);
   final Color darkBg = const Color(0xFF101922);
   final Color inputBorder = const Color(0xFFCFDBE7);
-  
-  // Color gris neutro para textos secundarios (legible en ambos modos)
-  final Color textGray = const Color(0xFF94A3B8); 
+  final Color textGray = const Color.fromARGB(255, 13, 13, 14);
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +32,6 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: isDark ? Colors.white : Colors.black,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: Text(
           'Login',
           style: TextStyle(
@@ -94,8 +85,8 @@ class _LoginPageState extends State<LoginPage> {
               'Inicia sesión para reservar tu próximo servicio',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16, 
-                color: isDark ? Colors.white70 : const Color(0xFF4B5563)
+                fontSize: 16,
+                color: isDark ? Colors.white70 : const Color(0xFF4B5563),
               ),
             ),
 
@@ -180,7 +171,11 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.symmetric(vertical: 32),
               child: Row(
                 children: [
-                  Expanded(child: Divider(color: isDark ? Colors.white12 : inputBorder)),
+                  Expanded(
+                    child: Divider(
+                      color: isDark ? Colors.white12 : inputBorder,
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
@@ -188,7 +183,11 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: textGray, fontSize: 14),
                     ),
                   ),
-                  Expanded(child: Divider(color: isDark ? Colors.white12 : inputBorder)),
+                  Expanded(
+                    child: Divider(
+                      color: isDark ? Colors.white12 : inputBorder,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -224,8 +223,10 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '¿No tienes cuenta?', 
-                  style: TextStyle(color: isDark ? Colors.white70 : const Color(0xFF4B5563))
+                  '¿No tienes cuenta?',
+                  style: TextStyle(
+                    color: isDark ? Colors.white70 : const Color(0xFF4B5563),
+                  ),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pushNamed(context, '/register'),
